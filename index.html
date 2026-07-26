@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Grown Academy — Learn to Earn With Just Your Phone</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..800&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<base target="_blank">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2607496299653497');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2607496299653497&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<style>
+:root{
+  --paper:#EFEEE1;
+  --paper-deep:#E4E2D2;
+  --ink:#16241C;
+  --ink-soft:#3F4E44;
+  --forest:#1F4D3D;
+  --forest-deep:#132E24;
+  --leaf:#3E8A63;
+  --amber:#C98A3A;
+  --amber-light:#E7B462;
+  --card:#FBFAF4;
+  --line: rgba(31,77,61,0.18);
+  --radius: 14px;
+  --shadow: 0 12px 30px rgba(19,46,36,0.10);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Work Sans', sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+h1,h2,h3,h4{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  color:var(--forest-deep);
+  margin:0 0 0.5em;
+  letter-spacing:-0.01em;
+}
+p{margin:0 0 1em;color:var(--ink-soft);}
+a{color:inherit;}
+.eyebrow{
+  font-family:'Space Mono', monospace;
+  text-transform:uppercase;
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  color:var(--amber);
+}
+img{max-width:100%;display:block;border-radius:var(--radius);}
+
+/* ---------- Growth spine (signature element) ---------- */
+.growth-spine{
+  position:fixed;
+  left:0; top:0;
+  width:4px; height:100vh;
+  background:var(--line);
+  z-index:60;
+}
+.growth-spine::after{
+  content:"";
+  position:absolute;
+  left:0; top:0; width:100%;
+  height:var(--grow, 0%);
+  background:linear-gradient(180deg, var(--leaf), var(--amber));
+  transition:height 0.1s linear;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:0.6em;
+  padding:0.95em 1.7em;
+  background:var(--forest);
+  color:#fff !important;
+  border-radius:999px;
+  font-weight:600;
+  text-decoration:none;
+  font-size:0.98rem;
+  border:1px solid var(--forest);
+  transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  position:relative;
+}
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 26px rgba(31,77,61,0.28);
+  background:var(--forest-deep);
+}
+.btn i{position:static !important; margin:0 !important;}
+.btn-outline{
+  background:transparent;
+  color:var(--forest-deep) !important;
+  border:1px solid var(--forest);
+}
+.btn-outline:hover{background:rgba(31,77,61,0.06);}
+.btn-lg{padding:1.15em 2.1em; font-size:1.05rem;}
+.btn-white{background:var(--card); color:var(--forest-deep) !important; border-color:var(--card);}
+.btn-white:hover{background:#fff;}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal{opacity:0; transform:translateY(28px); transition:opacity 0.7s ease, transform 0.7s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+
+/* ---------- Popup ---------- */
+.popup-overlay{
+  position:fixed; inset:0; background:rgba(19,46,36,0.55);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.35s ease;
+  z-index:200; padding:20px;
+}
+.popup-overlay.active{opacity:1; pointer-events:auto;}
+.popup-box{
+  background:var(--card); border-radius:var(--radius);
+  max-width:420px; padding:2.2em; position:relative;
+  transform:scale(0.92); transition:transform 0.35s ease;
+  box-shadow:var(--shadow);
+}
+.popup-overlay.active .popup-box{transform:scale(1);}
+.popup-close{position:absolute; top:14px; right:18px; cursor:pointer; font-size:1.4rem; color:var(--ink-soft);}
+.popup-box h3{margin-bottom:0.4em;}
+
+/* ---------- Sticky bar ---------- */
+.sticky-bar{
+  position:fixed; left:0; right:0; bottom:-100px;
+  background:var(--forest-deep); color:#fff;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:1em; padding:0.9em 5%; z-index:150;
+  transition:bottom 0.4s ease;
+  flex-wrap:wrap;
+}
+.sticky-bar.visible{bottom:0;}
+.sticky-bar-text strong{color:var(--amber-light);}
+.sticky-bar-buttons{display:flex; gap:0.7em;}
+.sticky-bar .btn-outline{color:#fff !important; border-color:rgba(255,255,255,0.5);}
+
+/* ---------- Header ---------- */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.4em 6%;position: sticky;
+}
+.logo{font-family:'Fraunces', serif; font-weight:700; font-size:1.3rem;}
+.logo span{color:var(--amber);}
+nav{display:flex; gap:1.8em;}
+nav a{text-decoration:none; font-size:0.92rem; font-weight:500; color:var(--ink-soft); position:relative;}
+nav a::after{content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--amber); transition:width 0.25s ease;}
+nav a:hover::after{width:100%;}
+
+/* ---------- Hero ---------- */
+.hero{
+  display:grid; grid-template-columns:1.1fr 0.9fr; gap:3em;
+  align-items:center; padding:3em 6% 5em; position:relative;
+}
+.hero-badge{
+  display:inline-block; font-family:'Space Mono', monospace;
+  font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--forest); background:rgba(31,77,61,0.08);
+  padding:0.5em 0.9em; border-radius:999px; margin-bottom:1.2em;
+}
+h1{font-size:clamp(2.1rem, 3.6vw, 3.1rem); line-height:1.08;}
+h1 .highlight{color:var(--leaf); font-style:italic;}
+.hero-text > p{font-size:1.08rem; max-width:46ch;}
+.hero-cta-group{display:flex; gap:1em; flex-wrap:wrap; margin:1.6em 0;}
+.hero-trust{display:flex; align-items:center; gap:0.9em; font-size:0.9rem; color:var(--ink-soft);}
+.hero-trust-dots{display:flex;}
+.hero-trust-dots span{
+  width:30px; height:30px; border-radius:50%;
+  background:var(--leaf); border:2px solid var(--paper);
+  margin-left:-10px; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:0.8rem; font-weight:700;
+}
+.hero-trust-dots span:first-child{margin-left:0;}
+.hero-image{position:relative;}
+.hero-image::before{
+  content:"";
+  position:absolute; inset:-14px;
+  border:1.5px solid var(--amber);
+  border-radius:20px;
+  z-index:-1;
+}
+.hero-image img{border-radius:18px; box-shadow:var(--shadow);}
+
+/* growing vine svg decoration behind hero */
+.vine-deco{
+  position:absolute; right:-60px; top:-40px; width:220px; height:220px;
+  z-index:-2; opacity:0.5; pointer-events:none;
+}
+
+/* ---------- Sections general ---------- */
+.section{padding:5em 6%;}
+.section-title{font-size:clamp(1.6rem, 2.6vw, 2.2rem); text-align:center;}
+.section-subtitle{text-align:center; max-width:56ch; margin:0 auto 2.5em; color:var(--ink-soft);}
+
+/* ---------- About business ---------- */
+.about-business{padding:4em 6%;}
+.about-container{max-width:900px; margin:0 auto; text-align:center;}
+.lead{font-size:1.12rem; max-width:64ch; margin:0 auto 2em;}
+.about-card{
+  background:var(--card); border-radius:var(--radius);
+  padding:2.2em; text-align:left; box-shadow:var(--shadow);
+  border:1px solid var(--line);
+}
+.about-card h3{display:flex; align-items:center; gap:0.5em; font-size:1.2rem;}
+.about-card .icon{
+  width:26px; height:26px; border-radius:50%;
+  background:var(--amber); color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:0.85rem; flex:none;
+}
+.about-card ul{padding-left:1.1em; margin:1em 0 0;}
+.about-card li{margin-bottom:0.7em; color:var(--ink-soft);}
+.about-card li strong{color:var(--forest-deep);}
+
+/* ---------- Problem ---------- */
+.problem{background:var(--paper-deep);}
+.problem-header{text-align:center; max-width:56ch; margin:0 auto 2.5em;}
+.pain-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+  gap:1.4em; max-width:1100px; margin:0 auto;
+}
+.pain-card{
+  background:var(--card); border-radius:var(--radius); padding:1.8em;
+  border-left:3px solid var(--amber);
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+}
+.pain-card:hover{transform:translateY(-6px); box-shadow:var(--shadow);}
+.pain-card h3{font-size:1.05rem; margin-bottom:0.4em;}
+
+/* ---------- Solution ---------- */
+.solution-container{
+  display:grid; grid-template-columns:1fr 1fr; gap:3em; align-items:center;
+  max-width:1150px; margin:0 auto;
+}
+.solution-badges{display:flex; flex-wrap:wrap; gap:0.6em; margin-top:1.4em;}
+.solution-badge{
+  font-family:'Space Mono', monospace; font-size:0.7rem;
+  padding:0.5em 0.9em; border-radius:999px; letter-spacing:0.04em;
+  background:rgba(62,138,99,0.12); color:var(--forest);
+}
+.solution-media-group{  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;}
+.solution-image{grid-column:span 1; overflow:hidden; border-radius:var(--radius);}
+.solution-image img{transition:transform 0.5s ease;}
+.solution-image:hover img{transform:scale(1.05);}
+.video-wrapper{grid-column:1 / -1; position:relative; padding-top:56.25%; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);}
+.video-wrapper iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+
+/* ---------- Story ---------- */
+.story-section{background:var(--forest-deep); color:#fff; padding:5em 6%;}
+.story-container{max-width:1000px; margin:0 auto;}
+.story-header{text-align:center; margin-bottom:2.5em;}
+.story-label{font-family:'Space Mono', monospace; text-transform:uppercase; font-size:0.72rem; letter-spacing:0.12em; color:var(--amber-light);}
+.story-section h2, .story-section h3{color:#fff;}
+.story-top{display:grid; grid-template-columns:220px 1fr; gap:2.4em; align-items:start;}
+.story-photo img{border-radius:var(--radius); border:2px solid rgba(255,255,255,0.15);}
+.story-quote{border-left:3px solid var(--amber-light); padding-left:1.2em; margin:1.2em 0;}
+.story-section p{color:rgba(255,255,255,0.78);}
+.story-proofs{display:grid; grid-template-columns:1fr 1fr; gap:1.4em; margin-top:2.5em;}
+.proof-card{background:rgba(255,255,255,0.06); border-radius:var(--radius); padding:1em; border:1px solid rgba(255,255,255,0.1);}
+.proof-card p{font-size:0.9rem; font-style:italic; margin-top:0.8em;}
+
+/* ---------- Benefits ---------- */
+.benefits-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+  gap:1.6em; max-width:1150px; margin:0 auto;
+}
+.benefit-card{
+  background:var(--card); border-radius:var(--radius); padding:2em;
+  border:1px solid var(--line); position:relative; overflow:hidden;
+  transition:transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.benefit-card:hover{transform:translateY(-6px); box-shadow:var(--shadow); border-color:var(--leaf);}
+.benefit-number{
+  font-family:'Space Mono', monospace; font-size:0.8rem; color:var(--amber);
+  margin-bottom:0.6em; letter-spacing:0.06em;
+}
+.benefit-card h3{font-size:1.08rem;}
+
+/* ---------- Mentor ---------- */
+.mentor{background:var(--forest); color:#fff;}
+.mentor-container{display:grid; grid-template-columns:0.8fr 1.2fr; gap:3em; max-width:1100px; margin:0 auto; align-items:center;}
+.mentor-images{display:grid; grid-template-columns:1fr 1fr; gap:0.8em;}
+.mentor-image-box img{border-radius:var(--radius); border:2px solid rgba(255,255,255,0.2);}
+.mentor-text h2, .mentor-role{color:#fff;}
+.mentor-role{display:block; font-family:'Space Mono', monospace; font-size:0.78rem; color:var(--amber-light); margin-bottom:1em;}
+.mentor p{color:rgba(255,255,255,0.82);}
+
+/* ---------- Testimonials ---------- */
+.testimonials-intro{max-width:64ch; margin:0 auto 2.5em; text-align:center;}
+.testimonial-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:1.2em; max-width:1100px; margin:0 auto 3em;
+}
+.testimonial-image{border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);}
+.success-stories{display:grid; gap:2.5em; max-width:820px; margin:0 auto;}
+.success-story{
+  background:var(--card); border-radius:var(--radius); padding:2em;
+  border:1px solid var(--line);
+}
+.success-story h4{font-size:1.15rem; margin-bottom:0.6em;}
+.success-story h4 span{color:var(--leaf);}
+.story-images-row{display:grid; gap:0.8em; margin:1em 0;}
+.story-images-row.double{grid-template-columns:1fr 1fr;}
+.story-img img{border-radius:10px;}
+.testimonial-cta-box{
+  text-align:center; max-width:600px; margin:3em auto 0;
+  background:var(--paper-deep); border-radius:var(--radius); padding:2.4em;
+}
+
+/* ---------- FAQ ---------- */
+.faq-list{max-width:760px; margin:0 auto;}
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-question{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.3em 0; cursor:pointer; font-weight:600; color:var(--forest-deep);
+}
+.faq-badge{
+  font-family:'Space Mono', monospace; font-size:0.62rem; background:var(--amber);
+  color:#fff; padding:0.2em 0.5em; border-radius:5px; margin-left:0.5em; vertical-align:middle;
+}
+.faq-toggle{font-family:'Fraunces', serif; font-size:1.3rem; color:var(--amber); transition:transform 0.3s ease;}
+.faq-item.open .faq-toggle{transform:rotate(45deg);}
+.faq-answer{max-height:0; overflow:hidden; transition:max-height 0.35s ease;}
+.faq-item.open .faq-answer{max-height:400px;}
+.faq-answer p{padding-bottom:1.3em;}
+
+/* ---------- Final CTA ---------- */
+.final-cta{
+  text-align:center; padding:5.5em 6%; background:var(--forest-deep); color:#fff;
+  position:relative; overflow:hidden;
+}
+.urgency{
+  display:inline-block; font-family:'Space Mono', monospace; font-size:0.75rem;
+  letter-spacing:0.08em; text-transform:uppercase; color:var(--forest-deep);
+  background:var(--amber-light); padding:0.5em 1em; border-radius:999px; margin-bottom:1.4em;
+}
+.final-cta h2{color:#fff; max-width:20ch; margin:0 auto 0.8em; font-size:clamp(1.7rem,3vw,2.4rem);}
+.final-cta p{color:rgba(255,255,255,0.78); max-width:60ch; margin:0 auto 1em;}
+.guarantee{font-size:0.85rem; color:rgba(255,255,255,0.55); margin-top:1.4em;}
+
+footer{text-align:center; padding:2em; font-size:0.82rem; color:var(--ink-soft);}
+
+@media (max-width:900px){
+  .hero, .solution-container, .story-top, .mentor-container{grid-template-columns:1fr;}
+  .mentor-images{max-width:320px;}
+  .story-proofs, .story-images-row.double, .mentor-images{grid-template-columns:1fr 1fr;}
+  nav{display:none;}
+  .growth-spine{display:none;}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="growth-spine" id="growthSpine"></div>
+
+<!-- EXIT INTENT POPUP -->
+<div class="popup-overlay" id="exitPopup" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()" aria-label="Close">&times;</button>
+    <h3>Before you close this tab</h3>
+    <p>I felt the same doubt scrolling through pages like this. What convinced me wasn't the promises — it was seeing the actual training and asking the community my own questions first.</p>
+    <a href="#about" class="btn" onclick="closePopup()">See how it actually works</a>
+  </div>
+</div>
+
+<!-- STICKY BOTTOM BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-bar-text">
+    <strong>Still thinking it over?</strong> Hundreds have already joined this month.
+  </div>
+  <div class="sticky-bar-buttons">
+    <a href="https://www.google.com/search?q=please+help+me+get+the+full+details+about+the+Grown+Academy+in+Nigeria" class="btn btn-outline">Explore More</a>
+    <a href="https://wa.me/2349123462296?text=Hello%20Coach%20Ugochukwu%2C%20please%20I%27ll%20love%20to%20join%20the%20Grown%20Academy%20and%20start%20earning%20online%20through%20my%20smartphone" class="btn"><i class="fab fa-whatsapp"></i> Send Me a DM</a>
+  </div>
+</div>
+
+<header>
+  <div class="logo">Grown<span>Academy</span></div>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#mentor">Mentor</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text reveal">
+    <div class="hero-badge">Registered Education Community</div>
+    <h1>Learn Affiliate Marketing & Start Earning Online <span class="highlight">With Just Your Phone</span></h1>
+    <p>Join a community of everyday people who are turning their smartphones into income tools. No experience needed. No laptop required. Just a proven system, real mentorship, and people who actually want to see you win.</p>
+    <div class="hero-cta-group">
+      <a href="https://wa.me/2349123462296?text=Hello%20Coach%20Ugochukwu%2C%20please%20I%27ll%20love%20to%20join%20the%20Grown%20Academy%20and%20start%20earning%20online%20through%20my%20smartphone" class="btn"><i class="fab fa-whatsapp"></i> Send Me a DM to Get Started</a>
+      <a href="https://www.google.com/search?q=please+help+me+get+the+full+details+about+the+Grown+Academy+in+Nigeria" class="btn btn-outline">Explore More</a>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-dots"><span>+</span><span>+</span><span>+</span></div>
+      <span><strong id="memberCount">0</strong>+ members already earning</span>
+    </div>
+  </div>
+  <div class="hero-image reveal">
+    <svg class="vine-deco" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 190 C 60 150, 40 90, 100 60 C 140 40, 150 20, 180 10" stroke="#3E8A63" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="100" cy="60" r="4" fill="#C98A3A"/>
+      <circle cx="60" cy="120" r="3" fill="#C98A3A"/>
+      <circle cx="150" cy="25" r="3" fill="#C98A3A"/>
+    </svg>
+    <img src="./images/Grown Academy Family.jpeg" alt="People learning together">
+  </div>
+</section>
+
+<!-- ABOUT THE BUSINESS -->
+<!--<section class="about-business" id="business">
+  <div class="about-container reveal">
+    <h2>What Is Affiliate Marketing?</h2>
+    <p class="lead">Affiliate marketing is one of the simplest and most powerful business models online. You promote other people's products, and when someone purchases through your link — you earn a commission. No customer service. No shipping. No stress.</p>
+    <div class="about-card">
+      <h3><span class="icon">+</span> What you'll learn in the training</h3>
+      <p>This program is designed to take you from complete beginner to confident affiliate marketer with real earning potential.</p>
+      <ul>
+        <li><strong>How Affiliate Marketing Really Works</strong> — and why most people fail</li>
+        <li><strong>Market Research & Selection</strong> — how to identify high-demand niches</li>
+        <li><strong>Traffic Generation Frameworks</strong> — organic content marketing and paid advertising</li>
+        <li><strong>How to Build Funnels That Convert</strong> — clicks into commissions</li>
+        <li><strong>Proven Growth & Scaling Strategies</strong> — to multiply your income</li>
+        <li><strong>Basic Mobile Graphic Design</strong> — creating assets using smartphone tools</li>
+        <li><strong>How to Build Your Social Media</strong> — from zero to thousands of followers without spending a kobo</li>
+      </ul>
+    </div>
+  </div>
+</section>-->
+
+<!-- PROBLEM -->
+<section class="section problem">
+  <div class="problem-header reveal">
+    <h2>Why Most People Stay Stuck Financially</h2>
+    <p>It's not because they aren't smart enough. It's because they never found the right door.</p>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card reveal"><h3>No Stable Income Source</h3><p>You work hard, you show up, but the money never seems to match the effort. There's always more month left at the end of your money.</p></div>
+    <div class="pain-card reveal"><h3>Scared of Online Scams</h3><p>Everywhere you look, someone is promising overnight riches. You've either been burned before or you know someone who has. Trust feels expensive.</p></div>
+    <div class="pain-card reveal"><h3>No Clear Starting Point</h3><p>YouTube videos contradict each other. Articles leave you more confused. You need someone who has actually walked the path to point you in the right direction.</p></div>
+    <div class="pain-card reveal"><h3>Limited by Your Situation</h3><p>No laptop. No capital. No connections. It feels like the system was designed to keep people like you on the sidelines.</p></div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="section solution" id="about">
+  <div class="solution-container">
+    <div class="solution-text reveal">
+      <h2>Meet The Game Changer — The Grown Academy</h2>
+      <p>It all began when I came across an affiliate marketing training which is the AMSS training (Affiliate Marketing Sales Secrets). It wasn't some random course put together to make quick money. This training is so different because once you get access to it (your training), you'll be given instant access to join the community — the <strong>Grown Academy (Get Rich Online With Nathel)</strong> — <strong>a registered community</strong> with a solid reputation for helping everyday people learn how to earn online using just their smartphones.</p>
+      <p>What stood out to me was how <strong>beginner-friendly</strong> the training is. I didn't need any experience in marketing, coding, or anything technical. Everything is fully documented, so you can learn at your own pace, whenever it suits you. No pressure, no rush.</p>
+      <p>One of the best parts of this community is that at least <strong>three times every month</strong>, we engage in free live sessions with our mentor. You can ask questions in real time, get clarity on anything you're struggling with, and connect with others on the same journey. If you miss a live session, don't worry — all recordings are saved and available for every member, including new ones.</p>
+      <div class="solution-badges">
+        <span class="solution-badge">Registered Platform</span>
+        <span class="solution-badge">Smartphone Only</span>
+        <span class="solution-badge">Beginner Friendly</span>
+        <span class="solution-badge">Community Support</span>
+        <span class="solution-badge">Self-Paced</span>
+      </div>
+    </div>
+    <div class="solution-media-group reveal">
+      <div class="solution-image"><img src="./number_grown_academy.jpeg" alt="Grown Academy community"></div>
+      <div class="solution-image"><img src="./images/Grown_Academy students.jpeg" alt="Grown Academy students"></div>
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/jWRxfCTEHgE" title="Grown Academy Full Explanation" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAL STORY -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-header reveal">
+      <span class="story-label">From One Student to Another</span>
+      <h2>Who Am I Exactly?</h2>
+    </div>
+    <div class="story-top reveal">
+      <div class="story-photo"><img src="./israel_current2.jpeg" alt="Coach Ugochukwu"></div>
+      <div class="story-intro">
+        <h3>Coach Ugochukwu</h3>
+        <p>My full name is Ugochukwu Israel, commonly known as Coach Ugochukwu, from Anambra State, Nigeria. I am a digital marketer and a dedicated member of the Grown Academy, founded in 2023.</p>
+        <div class="story-quote">
+          <p>Here's my journey — from tiredness to breakthrough: I didn't join Grown Academy because I already had everything figured out or because I had money to spare. I joined because I was tired. Tired of being a broke university student, tired of watching bills pile up while my allowance disappeared before the month even ended. I believe a lot of students can relate to that feeling.</p>
+        </div>
+        <p>That frustration became the main reason I decided to take action and try something different for my future. Even though the enrollment fee felt like a huge sacrifice at that time, I still took the risk and invested in myself.</p>
+        <p>Before the end of my second month into this business, which was after my training, I was able to get back my enrollment fee, and the growth still continues. None of this would have been possible without the mentorship and guidance of Grown Academy.</p>
+        <p>Looking back now, taking that step was one of the best decisions I made for myself. You can see for yourself below 👇 how long it really took me to get my first withdrawal after my training.</p>
+      </div>
+    </div>
+    <div class="story-proofs reveal">
+      <div class="proof-card"><img src="./israel_certificate.jpeg" alt="Certificate"><p>"This is my certificate of completion of my training under the mentorship of Coach Nathel from Selar."</p></div>
+      <div class="proof-card"><img src="./israel_first_cashout.jpeg" alt="First withdrawal"><p>"My very first withdrawal from the business! It opened my eyes that this is actually possible."</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section benefits" id="benefits">
+  <h2 class="section-title reveal">Why This Course Is Different</h2>
+  <p class="section-subtitle reveal">No fluff. No filler. This isn't just theory — it's a complete practical guide.</p>
+  <div class="benefits-grid">
+    <div class="benefit-card reveal"><div class="benefit-number">learn</div><h3>Step-by-step video lessons</h3><p>Lessons that take you from zero knowledge to actually earning commissions. Everything broken down so simply that anyone can follow.</p></div>
+    <div class="benefit-card reveal"><div class="benefit-number">build</div><h3>Plug-and-play funnel templates</h3><p>Get ready-made funnel templates that you can customize and deploy immediately to start generating leads and sales.</p></div>
+    <div class="benefit-card reveal"><div class="benefit-number">connect</div><h3>Live Mentorship + Recordings</h3><p>Join live classes at least 3 times a month via Telegram. Ask questions, get real-time feedback, and access all past recordings anytime.</p></div>
+    <div class="benefit-card reveal"><div class="benefit-number">belong</div><h3>Real Community Support</h3><p>You're not learning alone. Connect with other members, share wins, troubleshoot together, and build relationships that last.</p></div>
+    <div class="benefit-card reveal"><div class="benefit-number">pace</div><h3>Documented, Self-Paced Learning</h3><p>All training materials are organized and ready for you. Learn when you want, how you want, and revisit anything as many times as you need.</p></div>
+    <div class="benefit-card reveal"><div class="benefit-number">apply</div><h3>Tools & strategies used by top affiliates</h3><p>Gain access to the exact tools and strategies that top affiliates use to generate consistent income online.</p></div>
+  </div>
+</section>
+
+<!-- MENTOR -->
+<section class="section mentor" id="mentor">
+  <h2 class="section-title reveal">Meet The Man Behind The Movement</h2>
+  <p class="section-subtitle reveal" style="color:rgba(255,255,255,0.65);">He didn't start with any investment or connection. He started with hunger — and now he's helping others build what he wished he had.</p>
+  <div class="mentor-container reveal">
+    <div class="mentor-images">
+      <div class="mentor-image-box"><img src="./images/Nathel_painter.jpeg" alt="Coach Nathel - Past"></div>
+      <div class="mentor-image-box"><img src="./images/Nathel_done.jpeg" alt="Coach Nathel - Current"></div>
+    </div>
+    <div class="mentor-text">
+      <h2>Victor Nathel</h2>
+      <span class="mentor-role">Popularly known as Coach Nathel · Founder, Grown Academy (Est. 2023)</span>
+      <p>Nwosu Victor Nathel wasn't born into privilege. He spent years working as a painter — long days, hard labor, and paychecks that never stretched far enough. He knows what it feels like to grind and still come up short. To have dreams bigger than your circumstances.</p>
+      <p>But he refused to let that be his forever story. After his time at UNIBEN, affiliate marketing became the turning point that transformed his life permanently. It wasn't easy, but it was worth it.</p>
+      <p>In <strong>2023</strong>, he launched <strong>Grown Academy (Get Rich Online With Nathel)</strong> and the <strong>AMSS (Affiliate Marketing Sales Secrets)</strong> training program. His vision was simple: help beginners gain direction, build valuable online skills, and improve their financial lives — regardless of where they're starting from.</p>
+      <p>He didn't build this for people who already have it figured out. He built it for the ones who are struggling, the ones who are tired, the ones who know they deserve better but just need someone to show them the first step. That's you. And he's ready to guide you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials">
+  <h2 class="section-title reveal">Real People. Real Payouts. Real Daily Wins.</h2>
+  <div class="testimonials-intro reveal">
+    <p>One of the things that pushed me to finally take action was seeing proof that this actually works — not once in a while, but consistently. Inside the Grown Academy family, payouts aren't some rare celebration. They're part of the daily experience.</p>
+    <p>Members are cashing out every single day. From beginners making their first commissions to people achieving steady earnings — the community keeps growing with people taking real steps toward financial independence.</p>
+  </div>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card reveal"><div class="testimonial-image"><img src="./images/First_Testimonial.jpeg" alt="Payout proof 1"></div></div>
+    <div class="testimonial-card reveal"><div class="testimonial-image"><img src="./images/Second_Testimonial.jpeg" alt="Payout proof 2"></div></div>
+    <div class="testimonial-card reveal"><div class="testimonial-image"><img src="./images/Third_Testimonial.jpeg" alt="Payout proof 3"></div></div>
+  </div>
+
+  <div class="success-stories">
+    <div class="success-story reveal">
+      <h4>Meet <span>MaryJoan</span></h4>
+      <p>Today over 3,000 persons have gained financial freedom through affiliate marketing under the guidance of Grown Academy. MaryJoan is one of them.</p>
+      <p>She used to work in a fast food job earning ₦51,000 monthly. The sad thing about her job wasn't even the low salary — it was the constant deductions that got her tired and fed up.</p>
+      <div class="story-images-row single"><div class="story-img"><img src="./images/maryjoan_broke.jpg" alt="MaryJoan before"></div></div>
+      <p>She stumbled on Coach Nathel's video online, attended one of his webinars, and got interested. She was a little scared at first because of her past experience with the internet, but after researching Grown Academy and verifying it was legit, she made the move.</p>
+      <p>In less than 10 months, MaryJoan has made over <strong>₦7 million</strong> from this same business. She quit her job in just two months of testing affiliate marketing. See her results below:</p>
+      <div class="story-images-row double">
+        <div class="story-img"><img src="./images/maryjoan_testimony.webp" alt="MaryJoan testimony"></div>
+        <div class="story-img"><img src="./images/maryjoan_rich.webp" alt="MaryJoan after"></div>
+      </div>
+      <p>This is the same person from the previous picture after she became a student of Grown Academy. She's now a proud owner of a brand new car and a house — and she's still counting her blessings.</p>
+    </div>
+
+    <div class="success-story reveal">
+      <h4>Meet <span>Dorcas Opeyemi</span></h4>
+      <p>Dorcas was a class teacher earning ₦20,000 monthly for 5 complete years with nothing to show for it. Then she found Grown Academy.</p>
+      <div class="story-images-row single"><div class="story-img"><img src="./images/Dorcas_testimony.webp" alt="Dorcas testimony"></div></div>
+      <p>Almost <strong>₦3 million</strong> in less than 5 months. That's the power of taking action with the right guidance.</p>
+    </div>
+
+    <div class="success-story reveal">
+      <h4>Meet <span>Moses</span></h4>
+      <p>Moses's story is a touching one. A wheelbarrow pusher who had lost hope and was struggling all his life — until he found Grown Academy.</p>
+      <div class="story-images-row single"><div class="story-img"><img src="./images/moses_testimony.webp" alt="Moses testimony"></div></div>
+      <p>Everything turned around for him. There are so many more stories to share, but the testimonies are endless.</p>
+    </div>
+  </div>
+
+  <div class="testimonial-cta-box reveal">
+    <h3>Your Story Could Be Next</h3>
+    <p>These aren't special people. They were just like you — tired, stuck, and looking for a way out. The only difference? They took action. Will you?</p>
+    <a href="https://wa.me/2349123462296?text=Hello%20Coach%20Ugochukwu%2C%20please%20I%27ll%20love%20to%20join%20the%20Grown%20Academy%20and%20start%20earning%20online%20through%20my%20smartphone" class="btn btn-lg"><i class="fab fa-whatsapp"></i> Send Me a DM to Join</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq" id="faq">
+  <h2 class="section-title reveal">Questions You Might Be Asking</h2>
+  <p class="section-subtitle reveal">Straight answers. No beating around the bush.</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-question"><span>Do I need any prior experience to join?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-answer"><p>Not at all. Grown Academy was literally built for beginners. Coach Nathel designed the training assuming you know nothing about affiliate marketing or online business. If you can use your smartphone to chat and browse social media, you have more than enough starting knowledge. We'll teach you everything else, step by step.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>Can I really do this with just my smartphone?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-answer"><p>Yes — the entire system is optimized for mobile. You don't need a laptop, expensive software, or any fancy equipment. Your phone is your complete business tool. Many of our top earners started and still operate entirely from their phones.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>What if I can't make the live classes?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-answer"><p>No problem at all. While we hold live sessions at least three times a month in our Telegram community, every single session is recorded and saved for all members — including new ones who join later. Plus, the training is fully documented, so you can go through everything at your own pace whenever your schedule allows.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>Is this legit? How do I know it's not a scam? <span class="faq-badge">VERIFIED</span></span><span class="faq-toggle">+</span></div>
+      <div class="faq-answer"><p>I get this question — and honestly, you should ask it. Grown Academy is government-approved and fully registered. This isn't some faceless operation hiding behind a screen. Coach Nathel is a real person with a real story, and our community is transparent, active, and full of real people sharing real results daily. You can see the proof yourself in our testimonials above.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>How soon can I expect to start earning?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-answer"><p>Results vary because effort varies, but many members start seeing their first commissions within their first few weeks of serious implementation. The key is following the documented training, showing up for mentorship, and actually applying what you learn. This isn't a lottery ticket — it's a skill you build. But once it clicks, it keeps paying.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="join">
+  <div class="urgency reveal">Limited spots available for this month's intake</div>
+  <h2 class="reveal">The Only Question Left Is: What If This Actually Works for You Too?</h2>
+  <p class="reveal">I've shared my story. I've shown you the community. I've introduced you to the mentor who actually cares about your growth. I've answered the questions that were probably holding you back.</p>
+  <p class="reveal">Now it's on you. You can keep scrolling past opportunities like you've done before. Keep telling yourself "maybe later." Keep watching other people change their lives while yours stays exactly the same.</p>
+  <p class="reveal">Or — you can take the same leap I took when I was tired, broke, and desperate enough to try something new. The same leap that has already paid me back many times over.</p>
+  <p class="reveal"><strong>You don't need to be ready. You just need to be willing.</strong></p>
+  <a href="https://wa.me/2349123462296?text=Hello%20Coach%20Ugochukwu%2C%20please%20I%27ll%20love%20to%20join%20the%20Grown%20Academy%20and%20start%20earning%20online%20through%20my%20smartphone" class="btn btn-white reveal"><i class="fab fa-whatsapp"></i> Send Me a DM — I'm Ready</a>
+  <p class="guarantee reveal">Registered Education Community · Beginner-friendly system · Smartphone-only income model</p>
+</section>
+
+<section id="privacy-section" style="background:var(--forest-deep); color:rgba(255,255,255,0.55); font-size:12px; padding:30px 20px; text-align:center; border-top:1px solid rgba(255,255,255,0.1);">
+  <div style="max-width:800px; margin:0 auto; line-height:1.6;">
+    <h3 style="color:rgba(255,255,255,0.8); font-size:14px; margin-bottom:10px;">Privacy Statement & Terms</h3>
+    <p>Your privacy is important to us. We use information provided during communication solely to send educational materials and training paths regarding digital marketing skills.</p>
+    <p style="margin-top:15px;"><a href="#privacy-section" id="togglePrivacy" style="color:var(--amber-light); text-decoration:underline; cursor:pointer;">Click to View Full Privacy Policy & Terms</a></p>
+    <div id="privacyText" style="display:none; background:rgba(255,255,255,0.05); text-align:left; padding:15px; margin-top:15px; border-radius:8px; border:1px solid rgba(255,255,255,0.1);">
+      <strong style="color:#fff;">Privacy Policy & Terms of Service</strong><br><br>
+      <strong>1. Information We Collect:</strong> We only collect the details you voluntarily provide when you click our links to initiate a chat on WhatsApp (such as your phone number, name, or profile information).<br><br>
+      <strong>2. How We Use It:</strong> This data is used entirely to share instructional training materials, respond to inquiries about digital skills acquisition, and provide educational support. We do not use this data for automated spam or marketing lists.<br><br>
+      <strong>3. Data Protection:</strong> Your personal contact details are completely confidential. We do not sell, exchange, rent, or distribute your information to any third-party companies or advertising networks.<br><br>
+      <strong>4. User Choice:</strong> You have full control over your interaction with us. You can opt out of any conversation or stop receiving mentorship guidance at any moment simply by blocking or deleting the chat window.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Grown Academy. All Rights Reserved. | Registered Education Community for online income training.</p>
+</footer>
+
+<script>
+  // Exit intent popup
+  let popupShown = false;
+  document.addEventListener('mouseleave', function(e) {
+    if (e.clientY < 10 && !popupShown) {
+      document.getElementById('exitPopup').classList.add('active');
+      popupShown = true;
+    }
+  });
+  function closePopup(){ document.getElementById('exitPopup').classList.remove('active'); }
+
+  document.getElementById('togglePrivacy').addEventListener('click', function(e){
+    e.preventDefault();
+    const textDiv = document.getElementById('privacyText');
+    const open = textDiv.style.display === 'block';
+    textDiv.style.display = open ? 'none' : 'block';
+    this.textContent = open ? 'Click to View Full Privacy Policy & Terms' : 'Hide Privacy Policy & Terms';
+  });
+
+  // Sticky bar
+  const stickyBar = document.getElementById('stickyBar');
+  window.addEventListener('scroll', function(){
+    stickyBar.classList.toggle('visible', window.scrollY > window.innerHeight * 0.8);
+  });
+
+  // Smooth anchor scroll
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e){
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.querySelector('.faq-question').addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Growth spine scroll progress (signature element)
+  const spine = document.getElementById('growthSpine');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    spine.style.setProperty('--grow', pct + '%');
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Animated member counter
+  const counterEl = document.getElementById('memberCount');
+  let counted = false;
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !counted){
+        counted = true;
+        let val = 0;
+        const target = 6000;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+          val += step;
+          if (val >= target){ val = target; clearInterval(timer); }
+          counterEl.textContent = val.toLocaleString();
+        }, 20);
+      }
+    });
+  }, {threshold:0.5});
+  counterObserver.observe(counterEl);
+</script>
+
+</body>
+</html>
